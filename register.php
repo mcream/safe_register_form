@@ -1,17 +1,7 @@
 <?php
 // D A T A B A S E - C O N N E C T 
 
-// Data to connect with database
-$db_host = 'localhost';
-$db_user = 'root';
-$db_password = '';
-$db_name = 'formphp';
-// Executing connect to database
-$con = mysqli_connect($db_host, $db_user, $db_password, $db_name);
-if (mysqli_connect_errno()) {
-	// Display error info, when there is an error in the connection.
-	die ('Failed to connect to MySQL: ' . mysqli_connect_error());
-}
+require_once('db.php');
 
 // V A L I D A T I O N
 
@@ -37,9 +27,19 @@ if($stmt = $con->prepare('SELECT id, password FROM accounts WHERE username = ?')
     }else{
         if($stmt = $con->prepare('INSERT INTO accounts (username, password, email, activated) VALUES (?, ?, ?, ?)')){
             $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
-            $stmt->bind_param('sss', $_POST['username'], $password, $_POST['email']);
+            // Id generator
+            $uniqid = uniqid();
+            $stmt->bind_param('ssss', $_POST['username'], $password, $_POST['email'], $uniqid);
             $stmt->execute();
-                echo 'You account has added! Congratulation!';
+                //Configuartion of PHP mail sender
+               $from = 'localhost:80';
+               $subject = 'Account activated';
+               $headers = 'From: ' . $from . "\r\n" . 'Reply-To: ' . $from . "\r\n" . 'X-Mailer: PHP/' . phpversion() . "\r\n" . 'MIME-Version: 1.0' . "\r\n" . 'Content-Type: text/html; charset=UTF-8' . "\r\n";
+               $activate_link = 'http://localhost/Application/Register/accept.php?email=' . $_POST['email'] . '&code=' . $uniqid;
+                $message = '<p>Please click the following link to activate your account: <a href="' . $activate_link . '">' . $activate_link . '</a></p>';
+                mail($_POST['email'], $subject, $message, $headers);
+                echo 'Please check your email to activate your account!';
+        
         }else{
             echo 'Could not prepare statement';
         }
