@@ -35,7 +35,7 @@ if($stmt = $con->prepare('SELECT id, password FROM accounts WHERE username = ?')
         //Username exist
         echo 'Username is already used. Choose another one.';
     }else{
-        if($stmt = $con->prepare('INSERT INTO accounts (username, password, email) VALUES (?, ?, ?)')){
+        if($stmt = $con->prepare('INSERT INTO accounts (username, password, email, activated) VALUES (?, ?, ?, ?)')){
             $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
             $stmt->bind_param('sss', $_POST['username'], $password, $_POST['email']);
             $stmt->execute();
@@ -62,6 +62,7 @@ if($stmt = $con->prepare('SELECT id, password FROM accounts WHERE username = ?')
     if(strlen($_POST['password']) > 20 || strlen($_POST['password']) < 5){
         die ('You password should be between 5 and 20.');
     }
+
 }
 
 
