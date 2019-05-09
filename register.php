@@ -25,5 +25,26 @@ if (empty($_POST['username']) || empty($_POST['password']) || empty($_POST['emai
 	// One or more values are empty.
 	die ('Please complete the registration form');
 }
+// 
+if($stmt = $con->prepare('SELECT id, password FROM accounts WHERE username = ?')){
+// s = string, i = int, b = blob | Password will be hashed by password_hash   
+    $stmt->bind_param('s', $_POST['username']);
+    $stmt->execute();
+    $stmt->store_result();
+    if($stmt->num_rows > 0){
+        //Username exist
+        echo 'Username is already used. Choose another one.';
+    }else{
+        //Inser acc to database
+    }
+    $stmt->close();
+}else{
+    //Couldn't add new account. Propably is an error in sql staement.
+    echo 'Could not prepare statement';
+}
+
+
+
+
 
 ?>
