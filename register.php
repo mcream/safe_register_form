@@ -32,7 +32,7 @@ if($stmt = $con->prepare('SELECT id, password FROM accounts WHERE username = ?')
             $stmt->bind_param('ssss', $_POST['username'], $password, $_POST['email'], $uniqid);
             $stmt->execute();
                 //Configuartion of PHP mail sender
-               $from = 'localhost:80';
+               $from = 'localhost';
                $subject = 'Account activated';
                $headers = 'From: ' . $from . "\r\n" . 'Reply-To: ' . $from . "\r\n" . 'X-Mailer: PHP/' . phpversion() . "\r\n" . 'MIME-Version: 1.0' . "\r\n" . 'Content-Type: text/html; charset=UTF-8' . "\r\n";
                $activate_link = 'http://localhost/Application/Register/accept.php?email=' . $_POST['email'] . '&code=' . $uniqid;

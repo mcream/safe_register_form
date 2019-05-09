@@ -1,10 +1,10 @@
 <?php 
 
 // Data to connect with database
-$db_host = 'localhost';
-$db_user = 'root';
-$db_password = '';
-$db_name = 'formphp';
+$db_host = 'localhost'; //Host name (e.g - 127.0.0.1)
+$db_user = 'root'; // Username of database
+$db_password = ''; //Password of database
+$db_name = 'formphp'; // Database name
 
 // Executing connect to database
 $con = mysqli_connect($db_host, $db_user, $db_password, $db_name);
