@@ -49,7 +49,20 @@ if($stmt = $con->prepare('SELECT id, password FROM accounts WHERE username = ?')
     //Couldn't add new account. Propably is an error in sql staement.
     echo 'Could not prepare statement';
 }
-
+if($stmt = $con->prepare('SELECT id, password FROM accounts WHERE username = ?')){
+    // Email validation.
+    if(!filter_var($_POST['email'], FILTER_VALIDATE_EMAIL)){
+        die ('Email is not valid!');
+    }
+    // checking correct cases
+    if(preg_match('/[A-Za-z0-9]+/', $_POST['username']) == 0){
+        die('Username is not valid');
+    }
+    // checking length password
+    if(strlen($_POST['password']) > 20 || strlen($_POST['password']) < 5){
+        die ('You password should be between 5 and 20.');
+    }
+}
 
 
 
