@@ -35,7 +35,14 @@ if($stmt = $con->prepare('SELECT id, password FROM accounts WHERE username = ?')
         //Username exist
         echo 'Username is already used. Choose another one.';
     }else{
-        //Inser acc to database
+        if($stmt = $con->prepare('INSERT INTO accounts (username, password, email) VALUES (?, ?, ?)')){
+            $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+            $stmt->bind_param('sss', $_POST['username'], $password, $_POST['email']);
+            $stmt->execute();
+                echo 'You account has added! Congratulation!';
+        }else{
+            echo 'Could not prepare statement';
+        }
     }
     $stmt->close();
 }else{
